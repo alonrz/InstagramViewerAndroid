@@ -3,7 +3,6 @@ package com.example.alonrz.instagramviewer;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -31,6 +30,7 @@ public class StreamActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stream);
 
+        photos = new ArrayList<>();
         //setting pull-to-refresh
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -56,7 +56,7 @@ public class StreamActivity extends ActionBarActivity {
     }
 
     private void fetchPopularPhotosAsync() {
-        photos = new ArrayList<>(); //init array of photos
+//        photos = new ArrayList<>(); //init array of photos
 
         //https://api.instagram.com/v1/media/popular?client_id=<CLIENT_ID>
         String popularURL = "https://api.instagram.com/v1/media/popular?client_id=" + CLIENT_ID;
@@ -66,7 +66,6 @@ public class StreamActivity extends ActionBarActivity {
         client.get(popularURL, new JsonHttpResponseHandler() {
             //define success and failure getting the JSON
 
-
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 //fired with a successful response
@@ -74,8 +73,9 @@ public class StreamActivity extends ActionBarActivity {
                 //data → [x] → images → standard_resolution → height
                 //data → [x] → caption → text
                 //data → [x] → user → username
+                //data → [x] → likes → count
                 JSONArray photosJSON = null;
-                Log.i("DEBUG", response.toString());
+//                Log.i("DEBUG", response.toString());
                 try {
                     photos.clear();
                     photosJSON = response.getJSONArray("data");
@@ -91,6 +91,8 @@ public class StreamActivity extends ActionBarActivity {
                             photo.setPhotoHeight(photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getInt("height"));
                         if(photoJSON.getJSONObject("images") != null)
                             photo.setPhotoUrl(photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getString("url"));
+                        if(!photoJSON.isNull("likes"))
+                            photo.setLikes(photoJSON.getJSONObject("likes").getInt("count"));
                         photos.add(photo);
                     }
                     adapter.notifyDataSetChanged();

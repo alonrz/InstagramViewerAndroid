@@ -32,11 +32,13 @@ public class PostsAdapter extends ArrayAdapter<InstagramPost> {
         }
         // Lookup view for data population
         ImageView ivPhoto = (ImageView) convertView.findViewById(R.id.ivPhoto);
+        TextView tvLikes = (TextView) convertView.findViewById(R.id.tvLikes);
         TextView tvCaption = (TextView) convertView.findViewById(R.id.tvCaption);
         // Populate the data into the template view using the data object
         String formattedUserNameAndCaption = "<b>"+post.getUsername()+"</b> " +
                 "<i>"+post.getCaption()+"</i>";
         tvCaption.setText(Html.fromHtml(formattedUserNameAndCaption));
+        tvLikes.setText(Integer.toString(post.getLikes()));
         ivPhoto.setImageResource(0);//reset the image view
         Picasso.with(getContext()).load(post.getPhotoUrl()).placeholder(R.drawable.image_loading).error(R.drawable.error_icon).into(ivPhoto); //ivPhoto.set...;
         // Return the completed view to render on screen

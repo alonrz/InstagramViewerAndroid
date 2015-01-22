@@ -7,6 +7,15 @@ public class InstagramPost {
     //username, photo_url, mPhotoHeight, caption
     private String username, photoUrl, Caption;
     private int mPhotoHeight;
+    private int mLikes;
+
+    public int getLikes() {
+        return mLikes;
+    }
+
+    public void setLikes(int likes) {
+        this.mLikes = likes;
+    }
 
     public String getUsername() {
         return username;
