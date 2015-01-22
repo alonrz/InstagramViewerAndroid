@@ -1,7 +1,9 @@
 package com.example.alonrz.instagramviewer;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -22,13 +24,28 @@ public class StreamActivity extends ActionBarActivity {
     public final static String CLIENT_ID = "a84f39c11e27438e9e34aec687afec1f";
     private ArrayList<InstagramPost> photos;
     private PostsAdapter adapter;
+
+    private SwipeRefreshLayout swipeContainer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stream);
 
+        //setting pull-to-refresh
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchPopularPhotosAsync();
+            }
+        });
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
         //1. get data
-        fetchPopularPhotos();
+        fetchPopularPhotosAsync();
 
         //2. Build Adapter
          adapter = new PostsAdapter(this, photos);
@@ -38,7 +55,7 @@ public class StreamActivity extends ActionBarActivity {
         lvPosts.setAdapter(adapter);
     }
 
-    private void fetchPopularPhotos() {
+    private void fetchPopularPhotosAsync() {
         photos = new ArrayList<>(); //init array of photos
 
         //https://api.instagram.com/v1/media/popular?client_id=<CLIENT_ID>
@@ -58,6 +75,7 @@ public class StreamActivity extends ActionBarActivity {
                 //data → [x] → caption → text
                 //data → [x] → user → username
                 JSONArray photosJSON = null;
+                Log.i("DEBUG", response.toString());
                 try {
                     photos.clear();
                     photosJSON = response.getJSONArray("data");
@@ -67,15 +85,16 @@ public class StreamActivity extends ActionBarActivity {
                         InstagramPost photo = new InstagramPost();
                         if(photoJSON.getJSONObject("user")  !=null)
                             photo.setUsername(photoJSON.getJSONObject("user").getString("username"));
-                        if(photoJSON.getJSONObject("caption") != null)
+                        if(!photoJSON.isNull("caption"))
                             photo.setCaption(photoJSON.getJSONObject("caption").getString("text"));
-                        if(photoJSON.getJSONObject("images") != null)
+                        if(!photoJSON.isNull("images"))
                             photo.setPhotoHeight(photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getInt("height"));
                         if(photoJSON.getJSONObject("images") != null)
                             photo.setPhotoUrl(photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getString("url"));
                         photos.add(photo);
                     }
                     adapter.notifyDataSetChanged();
+                    swipeContainer.setRefreshing(false);
 
                 }catch(JSONException e)
                 {
