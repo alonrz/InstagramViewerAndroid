@@ -34,6 +34,8 @@ public class PostsAdapter extends ArrayAdapter<InstagramPost> {
         ImageView ivPhoto = (ImageView) convertView.findViewById(R.id.ivPhoto);
         TextView tvLikes = (TextView) convertView.findViewById(R.id.tvLikes);
         TextView tvCaption = (TextView) convertView.findViewById(R.id.tvCaption);
+        ImageView ivProfilePic = (ImageView) convertView.findViewById(R.id.ivProfilePic);
+
         // Populate the data into the template view using the data object
         String formattedUserNameAndCaption = "<b>"+post.getUsername()+"</b> " +
                 "<i>"+post.getCaption()+"</i>";
@@ -41,6 +43,7 @@ public class PostsAdapter extends ArrayAdapter<InstagramPost> {
         tvLikes.setText(Integer.toString(post.getLikes()));
         ivPhoto.setImageResource(0);//reset the image view
         Picasso.with(getContext()).load(post.getPhotoUrl()).placeholder(R.drawable.image_loading).error(R.drawable.error_icon).into(ivPhoto); //ivPhoto.set...;
+        Picasso.with(getContext()).load(post.getProfilePicture()).into(ivProfilePic);
         // Return the completed view to render on screen
         return convertView;
     }

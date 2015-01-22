@@ -73,6 +73,7 @@ public class StreamActivity extends ActionBarActivity {
                 //data → [x] → images → standard_resolution → height
                 //data → [x] → caption → text
                 //data → [x] → user → username
+                //data → [x] → user → profile_picture
                 //data → [x] → likes → count
                 JSONArray photosJSON = null;
 //                Log.i("DEBUG", response.toString());
@@ -83,8 +84,10 @@ public class StreamActivity extends ActionBarActivity {
                     {
                         JSONObject photoJSON = photosJSON.getJSONObject(i);
                         InstagramPost photo = new InstagramPost();
-                        if(photoJSON.getJSONObject("user")  !=null)
+                        if(photoJSON.getJSONObject("user")  !=null) {
                             photo.setUsername(photoJSON.getJSONObject("user").getString("username"));
+                            photo.setProfilePicture(photoJSON.getJSONObject("user").getString("profile_picture"));
+                        }
                         if(!photoJSON.isNull("caption"))
                             photo.setCaption(photoJSON.getJSONObject("caption").getString("text"));
                         if(!photoJSON.isNull("images"))

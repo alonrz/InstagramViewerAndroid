@@ -5,7 +5,19 @@ package com.example.alonrz.instagramviewer;
  */
 public class InstagramPost {
     //username, photo_url, mPhotoHeight, caption
-    private String username, photoUrl, Caption;
+    private String username;
+    private String photoUrl;
+    private String Caption;
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    private String profilePicture;
     private int mPhotoHeight;
     private int mLikes;
 
