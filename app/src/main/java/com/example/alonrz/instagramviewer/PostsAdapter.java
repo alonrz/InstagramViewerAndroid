@@ -38,7 +38,7 @@ public class PostsAdapter extends ArrayAdapter<InstagramPost> {
                 "<i>"+post.getCaption()+"</i>";
         tvCaption.setText(Html.fromHtml(formattedUserNameAndCaption));
         ivPhoto.setImageResource(0);//reset the image view
-        Picasso.with(getContext()).load(post.getPhotoUrl()).into(ivPhoto); //ivPhoto.set...;
+        Picasso.with(getContext()).load(post.getPhotoUrl()).placeholder(R.drawable.image_loading).error(R.drawable.error_icon).into(ivPhoto); //ivPhoto.set...;
         // Return the completed view to render on screen
         return convertView;
     }
