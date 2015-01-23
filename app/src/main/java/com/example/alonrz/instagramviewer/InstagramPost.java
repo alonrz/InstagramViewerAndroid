@@ -7,7 +7,10 @@ public class InstagramPost {
     //username, photo_url, mPhotoHeight, caption
     private String username;
     private String photoUrl;
-    private String Caption;
+    private String Caption = "";
+    private String profilePicture;
+    private int mPhotoHeight;
+    private int mLikes;
 
     public String getProfilePicture() {
         return profilePicture;
@@ -16,10 +19,6 @@ public class InstagramPost {
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
-
-    private String profilePicture;
-    private int mPhotoHeight;
-    private int mLikes;
 
     public int getLikes() {
         return mLikes;
