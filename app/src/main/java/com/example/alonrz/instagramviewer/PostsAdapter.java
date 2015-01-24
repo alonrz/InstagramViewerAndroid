@@ -1,6 +1,7 @@
 package com.example.alonrz.instagramviewer;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.makeramen.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 
@@ -25,6 +28,7 @@ public class PostsAdapter extends ArrayAdapter<InstagramPost> {
         TextView tvLikes;
         TextView tvCaption;
         ImageView ivProfilePic;
+        Transformation transformation;
     }
     public PostsAdapter(Context context, ArrayList<InstagramPost> posts) {
         super(context, R.layout.item_photo, posts);
@@ -43,6 +47,12 @@ public class PostsAdapter extends ArrayAdapter<InstagramPost> {
             viewHolder.tvLikes = (TextView) convertView.findViewById(R.id.tvLikes);
             viewHolder.tvCaption = (TextView) convertView.findViewById(R.id.tvCaption);
             viewHolder.ivProfilePic = (ImageView) convertView.findViewById(R.id.ivProfilePic);
+            viewHolder.transformation = new RoundedTransformationBuilder()
+                    .borderColor(Color.BLACK)
+                    .borderWidthDp(2)
+                    .cornerRadius(50)
+                    .oval(true)
+                    .build();
             convertView.setTag(viewHolder);
         }
         else
@@ -57,12 +67,31 @@ public class PostsAdapter extends ArrayAdapter<InstagramPost> {
         viewHolder.tvCaption.setText(Html.fromHtml(formattedUserNameAndCaption));
         viewHolder.tvLikes.setText(Integer.toString(post.getLikes()));
         viewHolder.ivPhoto.setImageResource(0);//reset the image view
+
+//        RoundedImageView img = (RoundedImageView) convertView.findViewById(R.id.imageView1);
+
+
+
+
+
+        //main picture
         Picasso.with(getContext())
                 .load(post.getPhotoUrl())
                 .placeholder(R.drawable.image_loading)
                 .error(R.drawable.error_icon)
+                .fit()
                 .into(viewHolder.ivPhoto); //ivPhoto.set...;
-        Picasso.with(getContext()).load(post.getProfilePicture()).into(viewHolder.ivProfilePic);
+
+        //profile picture
+        Picasso.with(getContext())
+                .load(post.getProfilePicture())
+                .transform(viewHolder.transformation)
+                .into(viewHolder.ivProfilePic);
+
+//        //rounded profile pic
+//        Picasso.with(getContext())
+//                .load(post.getProfilePicture())
+//                .into(img);
         // Return the completed view to render on screen
         return convertView;
     }
