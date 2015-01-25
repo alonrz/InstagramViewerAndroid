@@ -25,10 +25,12 @@ public class PostsAdapter extends ArrayAdapter<InstagramPost> {
     public static class ViewHolder
     {
         ImageView ivPhoto;
+        TextView tvProfileName;
         TextView tvLikes;
         TextView tvCaption;
         ImageView ivProfilePic;
         Transformation transformation;
+
     }
     public PostsAdapter(Context context, ArrayList<InstagramPost> posts) {
         super(context, R.layout.item_photo, posts);
@@ -47,6 +49,8 @@ public class PostsAdapter extends ArrayAdapter<InstagramPost> {
             viewHolder.tvLikes = (TextView) convertView.findViewById(R.id.tvLikes);
             viewHolder.tvCaption = (TextView) convertView.findViewById(R.id.tvCaption);
             viewHolder.ivProfilePic = (ImageView) convertView.findViewById(R.id.ivProfilePic);
+            viewHolder.tvProfileName = (TextView) convertView.findViewById(R.id.tvProfileName);
+
             viewHolder.transformation = new RoundedTransformationBuilder()
                     .borderColor(Color.BLACK)
                     .borderWidthDp(2)
@@ -65,14 +69,9 @@ public class PostsAdapter extends ArrayAdapter<InstagramPost> {
         String formattedUserNameAndCaption = "<b>"+post.getUsername()+"</b> " +
                 "<i>"+post.getCaption()+"</i>";
         viewHolder.tvCaption.setText(Html.fromHtml(formattedUserNameAndCaption));
+        viewHolder.tvProfileName.setText(post.getUsername());
         viewHolder.tvLikes.setText(Integer.toString(post.getLikes()));
         viewHolder.ivPhoto.setImageResource(0);//reset the image view
-
-//        RoundedImageView img = (RoundedImageView) convertView.findViewById(R.id.imageView1);
-
-
-
-
 
         //main picture
         Picasso.with(getContext())
@@ -88,10 +87,6 @@ public class PostsAdapter extends ArrayAdapter<InstagramPost> {
                 .transform(viewHolder.transformation)
                 .into(viewHolder.ivProfilePic);
 
-//        //rounded profile pic
-//        Picasso.with(getContext())
-//                .load(post.getProfilePicture())
-//                .into(img);
         // Return the completed view to render on screen
         return convertView;
     }
