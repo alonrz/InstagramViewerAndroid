@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.makeramen.RoundedTransformationBuilder;
@@ -30,6 +31,7 @@ public class PostsAdapter extends ArrayAdapter<InstagramPost> {
         TextView tvCaption;
         ImageView ivProfilePic;
         Transformation transformation;
+        LinearLayout llComments;
 
     }
     public PostsAdapter(Context context, ArrayList<InstagramPost> posts) {
@@ -50,7 +52,7 @@ public class PostsAdapter extends ArrayAdapter<InstagramPost> {
             viewHolder.tvCaption = (TextView) convertView.findViewById(R.id.tvCaption);
             viewHolder.ivProfilePic = (ImageView) convertView.findViewById(R.id.ivProfilePic);
             viewHolder.tvProfileName = (TextView) convertView.findViewById(R.id.tvProfileName);
-
+            viewHolder.llComments = (LinearLayout) convertView.findViewById(R.id.llComments);
             viewHolder.transformation = new RoundedTransformationBuilder()
                     .borderColor(Color.BLACK)
                     .borderWidthDp(2)
@@ -87,6 +89,15 @@ public class PostsAdapter extends ArrayAdapter<InstagramPost> {
                 .transform(viewHolder.transformation)
                 .into(viewHolder.ivProfilePic);
 
+        viewHolder.llComments.removeAllViews();
+        for(int i=0; i< post.getCommentLength(); i++)
+        {
+            View view = viewHolder.llComments.inflate(getContext(), R.layout.item_inside_row, null);
+            TextView tvComment = (TextView) view.findViewById(R.id.tvComment);
+            String formattedComment = "<b>"+post.getComment(i).getUserName()+"</b>: " + post.getComment(i).getText();
+            tvComment.setText(Html.fromHtml(formattedComment));
+            viewHolder.llComments.addView(view);
+        }
         // Return the completed view to render on screen
         return convertView;
     }

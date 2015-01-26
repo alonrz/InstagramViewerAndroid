@@ -75,6 +75,9 @@ public class StreamActivity extends ActionBarActivity {
                 //data → [x] → user → username
                 //data → [x] → user → profile_picture
                 //data → [x] → likes → count
+                //Comments:
+                //data → [x] → comments → data(array) → text
+                //data → [x] → comments → data(array) → from → username
                 JSONArray photosJSON = null;
 //                Log.i("DEBUG", response.toString());
                 try {
@@ -96,6 +99,23 @@ public class StreamActivity extends ActionBarActivity {
                             photo.setPhotoUrl(photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getString("url"));
                         if(!photoJSON.isNull("likes"))
                             photo.setLikes(photoJSON.getJSONObject("likes").getInt("count"));
+                        if(!photoJSON.isNull("comments"))
+                        {
+                            JSONArray comments = photoJSON.getJSONObject("comments").getJSONArray("data");
+                            JSONObject comment;
+                            for (int j=0; j<comments.length(); j++)
+                            {
+                                comment = comments.getJSONObject(j);
+                                String commentUsername;
+                                String commentText;
+                                if(comment!=null) {
+                                    commentText = (comment.getString("text"));
+                                    commentUsername = comment.getJSONObject("from").getString("username");
+                                    photo.addComment(new InstagramPost.InstaComment(commentText, commentUsername));
+                                }
+                            }
+                        }
+
                         photos.add(photo);
                     }
                     adapter.notifyDataSetChanged();
