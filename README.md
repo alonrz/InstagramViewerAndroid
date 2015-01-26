@@ -1,6 +1,8 @@
 # Instagram Viewer App for Android
 This ia a read-only Viewer app for Instagram. Can handle some basic instagram viewing options without the need to sign in with an Instagram account. The focus for this project is getting a handle on layouts. 
 
+Time spend: ~10 hours. Many just small UI tweaks and experimenting.
+
 External libraries used:
 - [RoundedImageView](https://github.com/vinc3m1/RoundedImageView)
 - [Android Asynchronous Http Client](http://loopj.com/android-async-http/)
