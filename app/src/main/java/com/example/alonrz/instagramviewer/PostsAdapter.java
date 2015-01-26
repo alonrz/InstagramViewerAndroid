@@ -87,6 +87,8 @@ public class PostsAdapter extends ArrayAdapter<InstagramPost> {
         Picasso.with(getContext())
                 .load(post.getProfilePicture())
                 .transform(viewHolder.transformation)
+                .placeholder(R.drawable.user_default_circle)
+                .error(R.drawable.error_icon)
                 .into(viewHolder.ivProfilePic);
 
         viewHolder.llComments.removeAllViews();
